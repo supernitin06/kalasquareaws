@@ -10,10 +10,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
+ cors({
+  origin: "http://localhost:3000", // or your deployed frontend URL
+  credentials: true,
+})
 );
 
 app.use("/api/user", userRoutes);
