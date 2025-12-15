@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/ubuntu/app || exit 1
+            cd /home/ubuntu/kalasquareaws || exit 1
             git pull origin main
             npm install
             pm2 restart backend || pm2 start index.js --name backend
