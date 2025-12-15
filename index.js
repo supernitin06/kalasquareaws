@@ -9,5 +9,6 @@ const PORT =  process.env.PORT;
 http.createServer(app).listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log("CI/CD Test Deployment");
+  console.log("CI/CD Test Deployment");
 });
 
