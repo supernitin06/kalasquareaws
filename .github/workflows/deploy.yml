@@ -10,22 +10,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Deploy & Restart App on EC2
+        uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT }}
           script: |
-            cd /home/ubuntu/kalasquareaws || exit 1
+            echo "👉 Loading NVM"
+            export NVM_DIR="/home/ubuntu/.nvm"
+            source "$NVM_DIR/nvm.sh"
+            source "$NVM_DIR/bash_completion"
+
+            echo "👉 Selecting Node version v22.18.0"
+            export PATH="$PATH:/home/ubuntu/.nvm/versions/node/v22.18.0/bin"
+
+            echo "👉 Moving to project directory"
+            cd ${{ secrets.PROJECT_PATH }}
+
+            echo "👉 Pulling latest code from GitHub"
             git pull origin main
+
+            echo "👉 Installing dependencies"
             npm install
-            pm2 restart backend || pm2 start index.js --name backend
+
+            echo "👉 Restarting PM2 service"
+            pm2 restart ap-news-server || pm2 start server.js --name ap-news-server
+
+            echo "✅ Deployment completed successfully"s --name backend
+
+           
